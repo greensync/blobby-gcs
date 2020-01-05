@@ -1,0 +1,6 @@
+Layout/LineLength:
+  Max: 140
+
+Naming/FileName:
+  Exclude:
+    - 'lib/blobby-gcs.rb'
