@@ -1,0 +1,8 @@
+steps:
+  - label: Style check
+    command: ./auto/check-style
+  - label: ':rotating_light: security'
+    command: ./auto/audit-gems
+  - label: Test
+    command: ./auto/test
+

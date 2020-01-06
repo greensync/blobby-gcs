@@ -1,0 +1,5 @@
+#! /bin/bash -eu
+#
+# Confirm that no gems in our Gemfile have known CVEs
+
+$(dirname $0)/dev ./scripts/audit-gems

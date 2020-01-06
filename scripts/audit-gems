@@ -1,0 +1,3 @@
+#! /bin/bash -eu
+
+bundle exec bundle-audit check --update
