@@ -1,4 +1,4 @@
-# Blobby::GCSStore
+# Blobby::GCSStore [![Build status](https://badge.buildkite.com/3a10d87beff89aab18d733ccd5fb3080e76020079c00ebdaab.svg)](https://buildkite.com/gs/blobby-gcs)
 
 This gem provides an GCS-based implementation of the "store" interface defined by the ["blobby"](https://github.com/realestate-com-au/blobby) gem.  It's been packaged separately, to avoid adding dependencies to the core gem.
 
