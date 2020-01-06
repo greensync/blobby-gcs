@@ -1,6 +1,28 @@
+Layout/EmptyLinesAroundClassBody:
+  EnforcedStyle: empty_lines
+
 Layout/LineLength:
   Max: 140
 
 Naming/FileName:
   Exclude:
     - 'lib/blobby-gcs.rb'
+
+Style/ClassAndModuleChildren:
+  EnforcedStyle: nested
+  Exclude:
+    - "spec/**/*"
+
+Style/Documentation:
+  Exclude:
+    - 'spec/**/*'
+    - 'lib/blobby/gcs_store.rb'
+
+Metrics/BlockLength:
+  Exclude:
+    - '**/*.gemspec'
+    - 'spec/**/*'
+
+Metrics/AbcSize:
+  Exclude:
+    - 'lib/blobby/gcs_store.rb'
