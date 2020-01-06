@@ -15,6 +15,7 @@ Gem::Specification.new do |spec|
 
   spec.files += Dir['lib/**/*']
   spec.files += Dir['LICENSE.txt']
+  spec.files += Dir['blobby-gcs.gemspec']
   spec.files += Dir['Gemfile']
   spec.files += Dir['Gemfile.lock']
   spec.files += Dir['README.md']
