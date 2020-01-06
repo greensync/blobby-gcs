@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
+require 'blobby'
+require 'blobby/key_transforming_store'
 require 'google/cloud/storage'
+require 'uri'
 
 module Blobby
   # A BLOB store backed by Google Cloud Storage.
