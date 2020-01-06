@@ -7,13 +7,13 @@ The simplest use-case is writing to a single bucket:
     gcs_store = Blobby.store("gs://<bucket_name>/<file_path_inside_bucket>")
     gcs_store["key"].write("IO containing a file")
 
-Credentials are provided using [environment variables](https://googleapis.dev/ruby/google-cloud-storage/latest/file.AUTHENTICATION.html)
+We recommend that you provide credentials using [environment variables](https://googleapis.dev/ruby/google-cloud-storage/latest/file.AUTHENTICATION.html)
 
 ```
     require 'blobby-gcs'
 
-    ENV["STORAGE_PROJECT"]     = "my-project-id"
-    ENV["STORAGE_CREDENTIALS"] = "path/to/keyfile.json"
+    ENV["GOOGLE_CLOUD_PROJECT"]     = "my-project-id"
+    ENV["GOOGLE_APPLICATION_CREDENTIALS"] = "path/to/keyfile.json"
 
     gcs_store = Blobby.store("gs://<bucket_name>/<file_path_inside_bucket>")
 ```
@@ -36,7 +36,15 @@ Or install it yourself as:
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests.
+You can run the tests within docker via `auto/test` or directly within your shell using `scripts/test`.
+
+The tests within this gem are pointing to the real **Google Cloud Store** as integration tests so you will need to provide credentials, if you have authenticated via [gcloud](https://cloud.google.com/sdk/gcloud/) you may already have credentials available when using `scripts/test`. If you are using docker then you will need to provide the credentials:
+
+```
+export GOOGLE_APPLICATION_CREDENTIALS=$HOME/.config/gcloud/application_default_credentials.json
+
+export GOOGLE_CLOUD_PROJECT=...name of project...
+```
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 

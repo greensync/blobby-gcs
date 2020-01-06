@@ -1,0 +1,6 @@
+#! /bin/bash
+
+gem install bundler:2.1.0
+
+bundle check || bundle install
+exec bundle exec "${@-bash}"

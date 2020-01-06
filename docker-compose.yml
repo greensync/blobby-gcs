@@ -1,0 +1,20 @@
+version: "3.7"
+
+services:
+  dev:
+    image: ruby:2.6.3
+    volumes:
+      - .:/work
+      - ruby-2.6.3-gem-cache:/usr/local/bundle
+      - rubocop-cache:/work/.cache/rubocop_cache
+      - "${GOOGLE_APPLICATION_CREDENTIALS-}:${GOOGLE_APPLICATION_CREDENTIALS-}:ro"
+    working_dir: /work
+    entrypoint: /work/scripts/bundle-exec
+    command: bash
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: "${GOOGLE_APPLICATION_CREDENTIALS-}"
+      STORAGE_PROJECT: "${GOOGLE_CLOUD_PROJECT-}"
+
+volumes:
+  ruby-2.6.3-gem-cache: ~
+  rubocop-cache: ~

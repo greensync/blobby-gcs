@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+# Operate in development environment
+
+set -Eeuo pipefail
+
+cd $(dirname $0)/..
+
+dc_args=""
+
+if [ "${1-}" = "--service-ports" ]; then
+  dc_args+=" $1"
+  shift
+fi
+
+# Delete containers and afterwards on CI
+if ${CI-false}; then
+  trap '{
+    echo "Stopping containers..."
+    docker-compose down
+  }' EXIT
+fi
+
+image="${IMAGE:-dev}"
+
+echo "Running..."
+set -x
+
+docker-compose run --rm $dc_args $image "${@-bash}"
