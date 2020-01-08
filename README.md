@@ -36,20 +36,25 @@ $ bundle
 
 Or install it yourself as:
 
-```
+```bash
 $ gem install blobby-gcs
 ```
 
 ## Development
 
-You can run the tests within docker via `auto/test` or directly within your shell using `scripts/test`.
+You can run the tests within Docker via `auto/test` or directly within your shell using `scripts/test`.
 
-There are integration tests within this gem which point to a real **Google Cloud Storage** bucket, so you will need to provide credentials. If you have authenticated via [`gcloud`](https://cloud.google.com/sdk/gcloud/), you may already have credentials available when using `scripts/test`. If you are using Docker, then you will need to provide the credentials:
+There are integration tests within this gem which point to a real **Google Cloud Storage** bucket, so credentials are required. If you do not already have `~/.config/gcloud/application_default_credentials.json` from authenticating with [`gcloud`](https://cloud.google.com/sdk/gcloud/), run:
 
 ```bash
-export GOOGLE_APPLICATION_CREDENTIALS=$HOME/.config/gcloud/application_default_credentials.json
-export GOOGLE_CLOUD_PROJECT=...name of project...
-export BLOBBY_GCS_TEST_BUCKET=...a bucket you have storage.objectAdmin access to...
+$ gcloud auth application-default login
+```
+
+You will also need to provide the name of a GCS bucket you have `storage.objectAdmin` access to:
+
+```bash
+export GOOGLE_CLOUD_PROJECT=unused
+export BLOBBY_GCS_TEST_BUCKET=...name of bucket...
 ```
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and publish the `.gem` file to [rubygems.org](https://rubygems.org).

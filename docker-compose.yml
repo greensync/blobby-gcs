@@ -7,13 +7,14 @@ services:
       - .:/work
       - ruby-2.6.3-gem-cache:/usr/local/bundle
       - rubocop-cache:/work/.cache/rubocop_cache
-      - "${GOOGLE_APPLICATION_CREDENTIALS-}:${GOOGLE_APPLICATION_CREDENTIALS-}:ro"
+      - "${GOOGLE_APPLICATION_CREDENTIALS-~/.config/gcloud/application_default_credentials.json}:/secrets/gcloud/credentials.json:ro"
     working_dir: /work
     entrypoint: /work/scripts/bundle-exec
     command: bash
     environment:
-      GOOGLE_APPLICATION_CREDENTIALS: "${GOOGLE_APPLICATION_CREDENTIALS-}"
-      STORAGE_PROJECT: "${GOOGLE_CLOUD_PROJECT-}"
+      GOOGLE_APPLICATION_CREDENTIALS: /secrets/gcloud/credentials.json
+      GOOGLE_CLOUD_PROJECT: unused
+      GOOGLE_AUTH_SUPPRESS_CREDENTIALS_WARNINGS: 'true'
 
 volumes:
   ruby-2.6.3-gem-cache: ~
