@@ -29,7 +29,7 @@ module Blobby
     end
 
     def available?
-      bucket.exists?
+      !!bucket&.exists?
     end
 
     def [](key)
@@ -47,14 +47,14 @@ module Blobby
       # https://googleapis.dev/ruby/google-cloud-storage/latest/Google/Cloud/Storage/File.html#exists%3F-instance_method
       # bucket.file(key) returns nil, if the file does not exist!
       def exists?
-        gcs_file.nil? ? false : gcs_file.exists?
+        !!gcs_file&.exists?
       end
 
       # https://googleapis.dev/ruby/google-cloud-storage/latest/Google/Cloud/Storage/File.html#download-instance_method
       def read
         return nil unless exists?
 
-        content = gcs_file.download
+        content = gcs_file.download.read
         if block_given?
           yield content
           nil
@@ -65,6 +65,7 @@ module Blobby
 
       # https://googleapis.dev/ruby/google-cloud-storage/latest/Google/Cloud/Storage/Bucket.html#create_file-instance_method
       def write(content)
+        content = StringIO.new(content) unless content.respond_to?(:read)
         bucket.create_file(content, key)
         nil
       end
@@ -81,7 +82,7 @@ module Blobby
       attr_reader :bucket, :key
 
       def gcs_file
-        @gcs_file ||= bucket.file(key)
+        bucket.file(key)
       end
 
     end

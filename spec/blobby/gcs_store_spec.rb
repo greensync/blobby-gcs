@@ -1,9 +1,38 @@
 # frozen_string_literal: true
 
 require 'blobby-gcs'
+require 'time'
 
-RSpec.describe Blobby::GCSStore do
-  context 'when accessing a public bucket' do
+# Load the abstract "Store" tests from "blobby".
+# This depends on the gem being packaged with "spec" dir intact.
+$LOAD_PATH << Gem.loaded_specs['blobby'].full_gem_path + '/spec'
+
+require 'blobby/store_behaviour'
+
+RSpec.describe Blobby::GCSStore, integration: true do
+  EXISTING_BUCKET_NAME = ENV.fetch('BLOBBY_GCS_TEST_BUCKET', 'greensync-blobby-gcs-test')
+
+  context 'shared examples from blobby gem' do
+    before { gcs_store['KEY'].delete }
+
+    subject(:gcs_store) { described_class.new(EXISTING_BUCKET_NAME) }
+
+    it_behaves_like Blobby::Store
+  end
+
+  context 'when accessing a non-existent bucket' do
+    before(:all) do
+      @gcs_store = Blobby.store('gs://greensync-blobby-gcs-test-non-existent-bucket')
+    end
+
+    describe '#available?' do
+      it 'is false' do
+        expect(@gcs_store).not_to be_available
+      end
+    end
+  end
+
+  context 'when accessing a public bucket (read only)' do
     before(:all) do
       @gcs_store = Blobby.store('gs://gcp-public-data-landsat')
     end
@@ -22,42 +51,59 @@ RSpec.describe Blobby::GCSStore do
 
         describe '#exists?' do
           it 'is true' do
-            expect(@gcs_file).to be_exist
+            # If this fails, Google may have removed the file from the bucket
+            expect(@gcs_file.exists?).to be_truthy
           end
         end
 
         describe '#read' do
           it 'downloads the content' do
             content = @gcs_file.read
-            content.rewind if content.respond_to? :rewind
-            expect(content.read).to include('GROUP = L1_METADATA_FILE')
+            expect(content).to include('GROUP = L1_METADATA_FILE')
           end
         end
 
         describe '#delete' do
-          xit 'is not tested'
+          it 'raises a permission denied error' do
+            expect { @gcs_file.delete }.to raise_error(Google::Cloud::PermissionDeniedError)
+          end
         end
 
         describe '#write' do
-          xit 'is not tested'
+          it 'raises a permission denied error' do
+            content = "herp\nderp"
+            expect { @gcs_file.write(content) }.to raise_error(Google::Cloud::PermissionDeniedError)
+          end
         end
       end
+    end
+  end
 
-      context 'with a key that does not exist in the bucket' do
-        before(:all) do
-          @gcs_file = @gcs_store['does/not/exist.txt']
+  context 'when accessing a private bucket (read/write)' do
+    before(:all) do
+      @gcs_store = Blobby.store('gs://' + EXISTING_BUCKET_NAME)
+    end
+
+    describe '#available?' do
+      it 'is true' do
+        expect(@gcs_store).to be_available
+      end
+    end
+
+    describe '#[]' do
+      context 'overwriting an existing key' do
+        let(:gcs_file) do
+          @gcs_store['blobby-gcs-test/' + Time.now.getutc.iso8601.gsub(':', '-') + '.txt']
         end
 
-        describe '#exists?' do
-          it 'is false' do
-            expect(@gcs_file).not_to be_exist
-          end
-        end
+        it 'updates the content' do
+          content_original = 'come with me if you want to live'
+          gcs_file.write(content_original)
+          expect(gcs_file.read).to eq(content_original)
 
-        describe '#read' do
-          it 'returns nil' do
-            expect(@gcs_file.read).to be_nil
-          end
+          content_updated = 'i want a divorce'
+          gcs_file.write(content_updated)
+          expect(gcs_file.read).to eq(content_updated)
         end
       end
     end
