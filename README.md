@@ -50,7 +50,7 @@ There are integration tests within this gem which point to a real **Google Cloud
 $ gcloud auth application-default login
 ```
 
-You will also need to provide the name of a GCS bucket you have `storage.objectAdmin` access to:
+You will also need to provide the name of a GCS bucket you have `storage.objectAdmin` access to (and unfortunately, also `storage.legacyBucketReader`):
 
 ```bash
 export GOOGLE_CLOUD_PROJECT=unused
