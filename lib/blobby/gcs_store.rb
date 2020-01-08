@@ -94,7 +94,7 @@ module Blobby
     attr_reader :bucket_name, :gcs_options
 
     def bucket
-      @bucket ||= gcs_client.bucket(bucket_name)
+      @bucket ||= gcs_client.bucket(bucket_name, skip_lookup: true)
     end
 
     def gcs_client
