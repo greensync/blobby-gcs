@@ -54,12 +54,14 @@ module Blobby
       def read
         return nil unless exists?
 
-        content = gcs_file.download.read
+        io = gcs_file.download
         if block_given?
-          yield content
+          while (chunk = io.read(512))
+            yield chunk
+          end
           nil
         else
-          content
+          io.read
         end
       end
 
