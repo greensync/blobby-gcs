@@ -18,6 +18,9 @@ Style/Documentation:
     - 'spec/**/*'
     - 'lib/blobby/gcs_store.rb'
 
+Style/DoubleNegation:
+  Enabled: false
+
 Metrics/BlockLength:
   Exclude:
     - '**/*.gemspec'
