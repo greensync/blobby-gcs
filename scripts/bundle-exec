@@ -1,5 +1,11 @@
 #! /bin/bash
 
+if [ -f /.docker-rc.d/.docker-bashrc ]; then
+  echo "source /.docker-rc.d/.docker-bashrc" >> ~/.bashrc
+else
+  echo ".docker-bashrc not found - see https://handbook.greensync.org/product/development/docker-compose/#injecting-your-own-dotfiles" >&2
+fi
+
 gem list bundler -iev 2.1.0 > /dev/null || gem install bundler:2.1.0
 
 bundle check || bundle install
