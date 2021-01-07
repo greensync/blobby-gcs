@@ -8,6 +8,7 @@ services:
       - ruby-2.6.3-gem-cache:/usr/local/bundle
       - rubocop-cache:/work/.cache/rubocop_cache
       - "${GOOGLE_APPLICATION_CREDENTIALS-~/.config/gcloud/application_default_credentials.json}:/secrets/gcloud/credentials.json:ro"
+      - ~/.docker-rc.d/:/.docker-rc.d/:ro
     working_dir: /work
     entrypoint: /work/scripts/bundle-exec
     command: bash
