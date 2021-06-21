@@ -46,7 +46,8 @@ RSpec.describe Blobby::GCSStore, integration: true do
     describe '#[]' do
       context 'with a key that exists in the bucket' do
         before(:all) do
-          @gcs_file = @gcs_store['LT05/PRE/001/001/LT50010011985144KIS00/LT50010011985144KIS00_MTL.txt']
+          @gcs_file =
+            @gcs_store['LC08/01/044/034/LC08_L1GT_044034_20130330_20170310_01_T2/LC08_L1GT_044034_20130330_20170310_01_T2_MTL.txt']
         end
 
         describe '#exists?' do
