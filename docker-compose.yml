@@ -16,6 +16,7 @@ services:
       GOOGLE_APPLICATION_CREDENTIALS: /secrets/gcloud/credentials.json
       GOOGLE_CLOUD_PROJECT: unused
       GOOGLE_AUTH_SUPPRESS_CREDENTIALS_WARNINGS: 'true'
+      CI: ~
 
 volumes:
   ruby-2.6.3-gem-cache: ~
