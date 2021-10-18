@@ -13,6 +13,8 @@ if [ "${1-}" = "--service-ports" ]; then
   shift
 fi
 
+docker-compose build dev
+
 # Delete containers and afterwards on CI
 if ${CI-false}; then
   trap '{
